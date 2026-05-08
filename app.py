@@ -39,8 +39,14 @@ df = pd.DataFrame(data)
 # HEADER
 # =====================================
 
-st.title("🌱 Soil Sludge Simulation")
-st.subheader("Simulasi Formulasi Pupuk Organik Berbasis Sludge")
+col1, col2 = st.columns([1,5])
+
+with col1:
+    st.image("logo_ipb.png", width=90)
+
+with col2:
+    st.title("🌱 Soil Sludge Simulation")
+    st.subheader("Simulasi Formulasi Pupuk Organik Berbasis Sludge")
 
 st.write("""
 Aplikasi simulasi penelitian:
