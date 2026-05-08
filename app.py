@@ -96,22 +96,32 @@ col3.metric("Total Fungi", round(simulasi_fungi, 2))
 # VISUALISASI
 # =====================================
 
-sim_data = pd.DataFrame({
-    'Parameter': ['pH', 'Mikroba', 'Fungi'],
-    'Nilai': [
-        simulasi_pH,
-        simulasi_mikroba,
-        simulasi_fungi
-    ]
-})
+st.header("🌿 Visualisasi Tanaman Kangkung")
 
-fig, ax = plt.subplots(figsize=(7,4))
+# Skor sederhana kesehatan tanaman
+skor = simulasi_pH + simulasi_mikroba + simulasi_fungi
 
-ax.bar(sim_data['Parameter'], sim_data['Nilai'])
+# Kondisi tanaman
+if skor < 6:
+    st.image(
+        "https://cdn-icons-png.flaticon.com/512/628/628324.png",
+        width=150
+    )
+    st.error("Tanaman kurang sehat")
 
-ax.set_title("Visualisasi Hasil Simulasi")
+elif skor < 10:
+    st.image(
+        "https://cdn-icons-png.flaticon.com/512/2909/2909762.png",
+        width=180
+    )
+    st.warning("Tanaman cukup baik")
 
-st.pyplot(fig)
+else:
+    st.image(
+        "https://cdn-icons-png.flaticon.com/512/7656/7656740.png",
+        width=220
+    )
+    st.success("Tanaman tumbuh optimal 🌱")
 
 # =====================================
 # INTERPRETASI
