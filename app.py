@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# =========================
-# DATA PENELITIAN
-# =========================
+# =====================================
+# DATA DASAR PENELITIAN
+# =====================================
 
 data = {
     'Perlakuan': ['C1','C2','C3','C4','C5','E1','E2','E3','E4','E5'],
@@ -15,55 +15,109 @@ data = {
 
 df = pd.DataFrame(data)
 
-# =========================
-# JUDUL
-# =========================
+# =====================================
+# HEADER
+# =====================================
 
-st.title("🌱 Simulasi Pupuk Organik Berbasis Sludge")
+st.title("🌱 Soil Sludge Simulation")
+st.subheader("Simulasi Formulasi Pupuk Organik Berbasis Sludge")
 
 st.write("""
-Dashboard penelitian Shinta Tahannifia  
+Aplikasi simulasi penelitian:
+Shinta Tahannifia
 Departemen Ilmu Tanah dan Sumberdaya Lahan IPB
 """)
 
-# =========================
-# PILIH PARAMETER
-# =========================
+# =====================================
+# SIDEBAR INPUT
+# =====================================
 
-parameter = st.selectbox(
-    "Pilih Parameter",
-    ['pH', 'Mikroba', 'Fungi']
+st.sidebar.header("⚙️ Pengaturan Simulasi")
+
+jenis = st.sidebar.selectbox(
+    "Pilih Chelating Agent",
+    ["Citric Acid", "EDTA"]
 )
 
-# =========================
-# GRAFIK
-# =========================
+konsentrasi = st.sidebar.slider(
+    "Konsentrasi (%)",
+    0,
+    125,
+    50
+)
 
-fig, ax = plt.subplots(figsize=(8,4))
+# =====================================
+# MODEL SIMULASI SEDERHANA
+# =====================================
 
-ax.bar(df['Perlakuan'], df[parameter])
+if jenis == "EDTA":
+    simulasi_pH = 5.3 - (konsentrasi * 0.005)
+    simulasi_mikroba = 8 - (konsentrasi * 0.04)
+    simulasi_fungi = 1 + (konsentrasi * 0.02)
 
-ax.set_xlabel("Perlakuan")
-ax.set_ylabel(parameter)
-ax.set_title(f"Grafik {parameter}")
+else:
+    simulasi_pH = 4.8 - (konsentrasi * 0.003)
+    simulasi_mikroba = 4 - (konsentrasi * 0.03)
+    simulasi_fungi = 0.5 + (konsentrasi * 0.01)
+
+# =====================================
+# HASIL SIMULASI
+# =====================================
+
+st.header("📊 Hasil Simulasi")
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric("pH Tanah", round(simulasi_pH, 2))
+col2.metric("Total Mikroba", round(simulasi_mikroba, 2))
+col3.metric("Total Fungi", round(simulasi_fungi, 2))
+
+# =====================================
+# VISUALISASI
+# =====================================
+
+sim_data = pd.DataFrame({
+    'Parameter': ['pH', 'Mikroba', 'Fungi'],
+    'Nilai': [
+        simulasi_pH,
+        simulasi_mikroba,
+        simulasi_fungi
+    ]
+})
+
+fig, ax = plt.subplots(figsize=(7,4))
+
+ax.bar(sim_data['Parameter'], sim_data['Nilai'])
+
+ax.set_title("Visualisasi Hasil Simulasi")
 
 st.pyplot(fig)
 
-# =========================
-# TABEL DATA
-# =========================
+# =====================================
+# INTERPRETASI
+# =====================================
 
-st.subheader("Data Penelitian")
+st.header("🧪 Interpretasi")
+
+if simulasi_pH < 4.5:
+    st.warning("Tanah sangat masam")
+
+elif simulasi_pH < 5.5:
+    st.info("Tanah masam")
+
+else:
+    st.success("pH tanah relatif baik")
+
+if simulasi_mikroba > 5:
+    st.success("Aktivitas mikroba tinggi")
+
+else:
+    st.warning("Aktivitas mikroba rendah")
+
+# =====================================
+# DATA ASLI PENELITIAN
+# =====================================
+
+st.header("📁 Data Asli Penelitian")
 
 st.dataframe(df)
-
-# =========================
-# ANALISIS SEDERHANA
-# =========================
-
-nilai_tertinggi = df.loc[df[parameter].idxmax()]
-
-st.success(
-    f"Perlakuan terbaik untuk parameter {parameter}: "
-    f"{nilai_tertinggi['Perlakuan']}"
-)
