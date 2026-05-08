@@ -42,7 +42,7 @@ df = pd.DataFrame(data)
 col1, col2 = st.columns([1,5])
 
 with col1:
-    st.image("logo_IPB.png", width=90)
+    st.image("logoIPB.png", width=90)
 
 with col2:
     st.title("🌱 Soil Sludge Simulation")
