@@ -1,4 +1,24 @@
 import streamlit as st
+st.markdown("""
+<style>
+
+/* Tombol collapse sidebar */
+button[kind="header"] {
+    background-color: #2E8B57;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    padding: 6px 10px;
+}
+
+/* Hover effect */
+button[kind="header"]:hover {
+    background-color: #3CB371;
+    color: white;
+}
+
+</style>
+""", unsafe_allow_html=True)
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -32,7 +52,7 @@ Departemen Ilmu Tanah dan Sumberdaya Lahan IPB
 # SIDEBAR INPUT
 # =====================================
 
-st.sidebar.header("⚙️ Pengaturan Simulasi")
+st.sidebar.header("🌱 Soil Control Panel")
 
 jenis = st.sidebar.selectbox(
     "Pilih Chelating Agent",
